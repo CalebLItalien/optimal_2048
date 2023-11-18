@@ -17,23 +17,25 @@ impl GameBoard {
         new_gameboard
     }
 
-    pub fn print_pretty(self) {
-        for row in self.grid {
-            println!("{:?}", row);
+    pub fn print_pretty(&self) {
+        for row in self.grid.iter() {
+            println!("[{}]", row.iter()
+                .map(|&num| if num == 0 { String::from("_") } else { num.to_string() })
+                .collect::<Vec<String>>()
+                .join(" "));
         }
-        println!();
+        println!(); 
     }
+    // pub fn reconstruct_path(path: Vec<(GameBoard, String)>, start: GameBoard, goal: u64){
+    //     println!("Starting board: ");
+    //     println!("Goal: {}", goal);
+    //     start.print_pretty();
 
-    pub fn reconstruct_path(path: Vec<(GameBoard, String)>, start: GameBoard, goal: u64){
-        println!("Starting board: ");
-        println!("Goal: {}", goal);
-        start.print_pretty();
-
-        for (board, direction) in path {
-            println!("Move: {}", direction);
-            board.print_pretty();
-        }
-    }
+    //     for (board, direction) in path {
+    //         println!("Move: {}", direction);
+    //         board.print_pretty();
+    //     }
+    // }
     
     pub fn get_possible_new_states(&self) -> Vec<GameBoard> {
         /*
