@@ -6,7 +6,7 @@ use std::time::SystemTime;
 fn main() {
     let board = GameBoard::new();
     let start_time = SystemTime::now();
-    a_star_search(board, 16);
+    a_star_search(board, 2048);
     match SystemTime::now().duration_since(start_time) {
         Ok(duration) => {
             println!("Time taken: {:?}", duration);

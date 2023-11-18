@@ -7,6 +7,7 @@ use std::cmp::{Ordering, Reverse};
 #[derive(Eq)]
 struct QueueItem {
     cost: u64,
+    moves: u64,
     game_board: GameBoard,
 }
 
@@ -32,11 +33,12 @@ pub fn a_star_search(start: GameBoard, goal: u64){
     let mut open_set: BinaryHeap<Reverse<QueueItem>> = BinaryHeap::new();
     let mut closed_set: HashSet<GameBoard> = HashSet::new();
 
-    open_set.push(Reverse(QueueItem { cost: 0, game_board: start.clone() }));    
+    open_set.push(Reverse(QueueItem { cost: 0, moves: 0, game_board: start.clone() }));    
     let mut came_from: HashMap<GameBoard, (GameBoard, String)> = HashMap::new();
 
     while let Some(Reverse(queue_item)) = open_set.pop() {
         let current = queue_item.game_board;
+        let moves_made = queue_item.moves; 
         if current.is_goal(goal) { 
             println!("Starting board:");
             start.print_pretty(); 
@@ -51,9 +53,13 @@ pub fn a_star_search(start: GameBoard, goal: u64){
         for direction in POSSIBLE_MOVES {
             let mut neighbor = current.clone();
             if neighbor.make_move(direction) {
-                let cost = heuristic(&neighbor);
+                let cost = heuristic(&neighbor) + moves_made + 1;
                 if !closed_set.contains(&neighbor) {
-                    open_set.push(Reverse(QueueItem {cost: cost, game_board: neighbor.clone()}));
+                    open_set.push(Reverse(QueueItem {
+                        cost: cost, 
+                        moves: moves_made + 1,
+                        game_board: neighbor.clone()
+                    }));
                     came_from.insert(neighbor, (current.clone(), direction.to_string()));
                 }
             }
@@ -121,8 +127,6 @@ pub fn reconstruct_path(came_from: HashMap<GameBoard, (GameBoard, String)>, curr
         println!("Move: {}", direction);
         board.print_pretty();
     }
-    println!("Final board:");
-    current.print_pretty();
     println!("Number of moves: {}", path.len());
 }
 
