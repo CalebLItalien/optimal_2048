@@ -32,12 +32,14 @@ pub fn a_star_search(start: GameBoard, goal: u64){
     let mut open_set: BinaryHeap<Reverse<QueueItem>> = BinaryHeap::new();
     let mut closed_set: HashSet<GameBoard> = HashSet::new();
 
-    open_set.push(Reverse(QueueItem { cost: 0, game_board: start }));    
+    open_set.push(Reverse(QueueItem { cost: 0, game_board: start.clone() }));    
     let mut came_from: HashMap<GameBoard, (GameBoard, String)> = HashMap::new();
 
     while let Some(Reverse(queue_item)) = open_set.pop() {
         let current = queue_item.game_board;
         if current.is_goal(goal) { 
+            println!("Starting board:");
+            start.print_pretty(); 
             reconstruct_path(came_from, current);
             return;
         }
@@ -114,11 +116,6 @@ pub fn reconstruct_path(came_from: HashMap<GameBoard, (GameBoard, String)>, curr
     }
     
     path.reverse();
-
-    if let Some((first_board, _)) = path.first() {
-        println!("Starting board:");
-        first_board.clone().print_pretty();
-    }
 
     for (board, direction) in &path {
         println!("Move: {}", direction);
