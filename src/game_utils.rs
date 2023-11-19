@@ -1,5 +1,6 @@
 const GRID_SIZE: usize = 4;
 use rand::{Rng, thread_rng};
+use std::time::Duration;
 
 use std::sync::Mutex;
 
@@ -19,7 +20,19 @@ impl PadToWidth for String {
 }
 
 lazy_static! {
-    static ref MOVE_COUNTER: Mutex<u32> = Mutex::new(0);
+    pub static ref BOARD_COUNTER: Mutex<u32> = Mutex::new(0);
+}
+
+lazy_static! {
+    pub static ref BOARD_COUNTER_LIST: Mutex<Vec<u32>> = Mutex::new(Vec::new());
+}
+
+lazy_static! {
+    pub static ref TIME_TAKEN: Mutex<Vec<Duration>> = Mutex::new(Vec::new());
+}
+
+lazy_static! {
+    pub static ref MOVES_MADE: Mutex<Vec<usize>> = Mutex::new(Vec::new());
 }
 
 impl GameBoard {
@@ -33,12 +46,12 @@ impl GameBoard {
     }
 
     fn increment_board_counter() {
-        let mut num_boards = MOVE_COUNTER.lock().unwrap();
+        let mut num_boards = BOARD_COUNTER.lock().unwrap();
         *num_boards += 1;
     }
     
     pub fn reset_board_counter() {
-        let mut num_boards = MOVE_COUNTER.lock().unwrap();
+        let mut num_boards = BOARD_COUNTER.lock().unwrap();
         *num_boards = 0;
     }
     
@@ -282,9 +295,10 @@ impl GameBoard {
         }
     }
 
-    pub fn print_board_count() {
-        let num_moves = MOVE_COUNTER.lock().unwrap();
+    pub fn print_board_count() -> u32 {
+        let num_moves = BOARD_COUNTER.lock().unwrap();
         println!("Total number of boards made: {}", *num_moves);
+        *num_moves
     }
     
 }

@@ -1,6 +1,6 @@
 const POSSIBLE_MOVES: [&str; 4] = ["up", "left", "down", "right"];
 const GRID_SIZE: usize = 4;
-use crate::game_utils::GameBoard;
+use crate::game_utils::{GameBoard, MOVES_MADE};
 use std::collections::{BinaryHeap, HashMap, HashSet};
 use std::cmp::{Ordering, Reverse};
 
@@ -129,5 +129,6 @@ pub fn reconstruct_path(came_from: HashMap<GameBoard, (GameBoard, String)>, curr
         board.print_pretty();
     }
     println!("Number of moves: {}", path.len());
+    MOVES_MADE.lock().unwrap().push(path.len());
 }
 
