@@ -36,7 +36,12 @@ impl GameBoard {
         let mut num_moves = MOVE_COUNTER.lock().unwrap();
         *num_moves += 1;
     }
-
+    
+    pub fn reset_move_counter() {
+        let mut num_moves = MOVE_COUNTER.lock().unwrap();
+        *num_moves = 0;
+    }
+    
     pub fn print_pretty(&self) {
         let horizontal_line = "---------------------------------";
         println!("{}", horizontal_line);
