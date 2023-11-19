@@ -30,6 +30,9 @@ impl Ord for QueueItem {
 }
 
 pub fn a_star_search(start: GameBoard, goal: u64){
+    println!("Starting board:");
+    start.print_pretty(); 
+    
     let mut open_set: BinaryHeap<Reverse<QueueItem>> = BinaryHeap::new();
     let mut closed_set: HashSet<GameBoard> = HashSet::new();
 
@@ -40,8 +43,6 @@ pub fn a_star_search(start: GameBoard, goal: u64){
         let current = queue_item.game_board;
         let moves_made = queue_item.moves; 
         if current.is_goal(goal) { 
-            println!("Starting board:");
-            start.print_pretty(); 
             reconstruct_path(came_from, current);
             return;
         }

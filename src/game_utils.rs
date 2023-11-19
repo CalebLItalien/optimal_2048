@@ -1,10 +1,19 @@
 const GRID_SIZE: usize = 4;
-const POSSIBLE_MOVES: [&str; 4] = ["up", "left", "down", "right"];
 use rand::{Rng, thread_rng};
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct GameBoard {
     pub grid: [[u64; GRID_SIZE]; GRID_SIZE],
+}
+
+trait PadToWidth {
+    fn pad_to_width(&self, width: usize) -> String;
+}
+
+impl PadToWidth for String {
+    fn pad_to_width(&self, width: usize) -> String {
+        format!("{:<width$}", self, width = width)
+    }
 }
 
 impl GameBoard {
@@ -18,39 +27,20 @@ impl GameBoard {
     }
 
     pub fn print_pretty(&self) {
+        let horizontal_line = "---------------------------------";
+        println!("{}", horizontal_line);
         for row in self.grid.iter() {
-            println!("[{}]", row.iter()
-                .map(|&num| if num == 0 { String::from("_") } else { num.to_string() })
-                .collect::<Vec<String>>()
-                .join(" "));
-        }
-        println!(); 
-    }
-    // pub fn reconstruct_path(path: Vec<(GameBoard, String)>, start: GameBoard, goal: u64){
-    //     println!("Starting board: ");
-    //     println!("Goal: {}", goal);
-    //     start.print_pretty();
-
-    //     for (board, direction) in path {
-    //         println!("Move: {}", direction);
-    //         board.print_pretty();
-    //     }
-    // }
-    
-    pub fn get_possible_new_states(&self) -> Vec<GameBoard> {
-        /*
-        Returns the possible new states of the board
-         */
-        let mut new_states = Vec::new();
-        for &direction in &POSSIBLE_MOVES {
-            let mut board_copy = self.copy();
-            let success = board_copy.make_move(direction);
-            if success{
-                new_states.push(board_copy);
+            let mut formatted_row = String::from("|");
+            for &num in row.iter() {
+                let cell = if num == 0 { "".to_string() } else { num.to_string() };
+                formatted_row += &format!(" {:^5} |", cell);
             }
+            println!("{}", formatted_row);
+            println!("{}", horizontal_line);
         }
-        new_states
+        println!();
     }
+    
 
     pub fn is_goal(&self, goal: u64) -> bool {
         /*
@@ -242,39 +232,26 @@ impl GameBoard {
         moved
     }
 
-    pub fn copy(&self) -> GameBoard {
-        /*
-        Returns a clone of the board
-         */
-        GameBoard {
-            grid: self.grid.clone(),
-        }
-    }
-
     pub fn spawn_new_tile(&mut self) {
-        /*
-        Spawns two new tiles on the board
-         */
-        let mut positions = Vec::new();
-        for (i, row) in self.grid.iter().enumerate() {
-            for (j, &value) in row.iter().enumerate() {
-                if value == 0 {
-                    positions.push((i, j));
+        let mut rng = thread_rng();
+        let empty_count = self.grid.iter().flatten().filter(|&&x| x == 0).count();
+    
+        if empty_count == 0 {
+            return;
+        }
+        let mut random_pos = rng.gen_range(1..=empty_count);
+    
+        'outer: for i in 0..GRID_SIZE {
+            for j in 0..GRID_SIZE {
+                if self.grid[i][j] == 0 {
+                    random_pos -= 1;
+                    if random_pos == 0 {
+                        self.grid[i][j] = if rng.gen_range(1..=10) > 1 { 2 } else { 4 };
+                        break 'outer;
+                    }
                 }
             }
         }
-        let length_positions = positions.len();
-        if length_positions > 0{
-            let mut rng = thread_rng();
-            let to_change = rng.gen_range(0..length_positions);
-            let prob = rng.gen_range(1..=10);
-
-            let (row, col) = positions[to_change];
-            if prob > 1{
-                self.grid[row][col] = 2;
-            } else {
-                self.grid[row][col] = 4;
-            }
-        }
     }
+    
 }
