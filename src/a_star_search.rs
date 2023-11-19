@@ -110,7 +110,7 @@ pub fn heuristic(board: &GameBoard) -> u64 {
     } else {
         0
     };
-    10 * max_tile_in_corner as u64 + empty_cells + 2 * merges + 2 * monotonicity + 2 * smoothness
+    25 * max_tile_in_corner as u64 + empty_cells + 2 * merges + 2 * monotonicity + 2 * smoothness
 }
 
 pub fn reconstruct_path(came_from: HashMap<GameBoard, (GameBoard, String)>, current: GameBoard) {

@@ -32,14 +32,14 @@ impl GameBoard {
         new_gameboard
     }
 
-    fn increment_move_counter() {
-        let mut num_moves = MOVE_COUNTER.lock().unwrap();
-        *num_moves += 1;
+    fn increment_board_counter() {
+        let mut num_boards = MOVE_COUNTER.lock().unwrap();
+        *num_boards += 1;
     }
     
-    pub fn reset_move_counter() {
-        let mut num_moves = MOVE_COUNTER.lock().unwrap();
-        *num_moves = 0;
+    pub fn reset_board_counter() {
+        let mut num_boards = MOVE_COUNTER.lock().unwrap();
+        *num_boards = 0;
     }
     
     pub fn print_pretty(&self) {
@@ -117,7 +117,7 @@ impl GameBoard {
             }
         }
         if moved { 
-            GameBoard::increment_move_counter();
+            GameBoard::increment_board_counter();
             self.spawn_new_tile(); 
         }
         moved
@@ -162,7 +162,7 @@ impl GameBoard {
             }
         }
         if moved { 
-            GameBoard::increment_move_counter();
+            GameBoard::increment_board_counter();
             self.spawn_new_tile(); 
         }
         moved
@@ -208,7 +208,7 @@ impl GameBoard {
             }
         }
         if moved { 
-            GameBoard::increment_move_counter();
+            GameBoard::increment_board_counter();
             self.spawn_new_tile(); 
         }
         moved
@@ -254,7 +254,7 @@ impl GameBoard {
             }
         }
         if moved { 
-            GameBoard::increment_move_counter();
+            GameBoard::increment_board_counter();
             self.spawn_new_tile();
          }
         moved

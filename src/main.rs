@@ -19,6 +19,7 @@ fn main() {
     let iterations: u32 = args[1].parse().expect("Error converting iterations to a number");
     let goal: u64 = args[2].parse().expect("Error converting goal to a number");
 
+    println!("=================================");
     for _ in 0..iterations {
         let board = GameBoard::new();
         let start_time = SystemTime::now();
@@ -32,5 +33,7 @@ fn main() {
             }
         }
         GameBoard::print_board_count();
+        GameBoard::reset_board_counter();
+        println!("=================================");
     }
 }
