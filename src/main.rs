@@ -5,6 +5,9 @@ use a_star_search::a_star_search;
 use std::env;
 use std::time::SystemTime;
 
+#[macro_use]
+extern crate lazy_static;
+
 fn main() {
     let args: Vec<String> = env::args().collect();
 
@@ -28,5 +31,6 @@ fn main() {
                 println!("An error occurred while measuring the time.");
             }
         }
+        GameBoard::print_board_count();
     }
 }

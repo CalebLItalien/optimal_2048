@@ -1,6 +1,8 @@
 const GRID_SIZE: usize = 4;
 use rand::{Rng, thread_rng};
 
+use std::sync::Mutex;
+
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct GameBoard {
     pub grid: [[u64; GRID_SIZE]; GRID_SIZE],
@@ -16,6 +18,10 @@ impl PadToWidth for String {
     }
 }
 
+lazy_static! {
+    static ref MOVE_COUNTER: Mutex<u32> = Mutex::new(0);
+}
+
 impl GameBoard {
     pub fn new() -> GameBoard {
         let mut new_gameboard = GameBoard {
@@ -24,6 +30,11 @@ impl GameBoard {
         new_gameboard.spawn_new_tile();
         new_gameboard.spawn_new_tile();
         new_gameboard
+    }
+
+    fn increment_move_counter() {
+        let mut num_moves = MOVE_COUNTER.lock().unwrap();
+        *num_moves += 1;
     }
 
     pub fn print_pretty(&self) {
@@ -100,7 +111,10 @@ impl GameBoard {
                 }
             }
         }
-        if moved { self.spawn_new_tile(); }
+        if moved { 
+            GameBoard::increment_move_counter();
+            self.spawn_new_tile(); 
+        }
         moved
     }
     fn move_right(&mut self) -> bool {
@@ -142,7 +156,10 @@ impl GameBoard {
                 }
             }
         }
-        if moved { self.spawn_new_tile(); }
+        if moved { 
+            GameBoard::increment_move_counter();
+            self.spawn_new_tile(); 
+        }
         moved
     }
 
@@ -185,7 +202,10 @@ impl GameBoard {
                 }
             }
         }
-        if moved { self.spawn_new_tile(); }
+        if moved { 
+            GameBoard::increment_move_counter();
+            self.spawn_new_tile(); 
+        }
         moved
     }
 
@@ -228,7 +248,10 @@ impl GameBoard {
                 }
             }
         }
-        if moved { self.spawn_new_tile(); }
+        if moved { 
+            GameBoard::increment_move_counter();
+            self.spawn_new_tile();
+         }
         moved
     }
 
@@ -252,6 +275,11 @@ impl GameBoard {
                 }
             }
         }
+    }
+
+    pub fn print_board_count() {
+        let num_moves = MOVE_COUNTER.lock().unwrap();
+        println!("Total number of boards made: {}", *num_moves);
     }
     
 }
