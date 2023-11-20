@@ -21,17 +21,8 @@ impl PadToWidth for String {
 
 lazy_static! {
     pub static ref BOARD_COUNTER: Mutex<u32> = Mutex::new(0);
-}
-
-lazy_static! {
     pub static ref BOARD_COUNTER_LIST: Mutex<Vec<u32>> = Mutex::new(Vec::new());
-}
-
-lazy_static! {
     pub static ref TIME_TAKEN: Mutex<Vec<Duration>> = Mutex::new(Vec::new());
-}
-
-lazy_static! {
     pub static ref MOVES_MADE: Mutex<Vec<usize>> = Mutex::new(Vec::new());
 }
 

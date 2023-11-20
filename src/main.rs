@@ -50,7 +50,7 @@ fn print_statistics() {
     let time_taken = TIME_TAKEN.lock().unwrap();
     let moves_made = MOVES_MADE.lock().unwrap();
 
-    println!("Board Counter List:");
+    println!("Board Counts:");
     for (index, count) in board_counter_list.iter().enumerate() {
         println!("{}: {}", index + 1, count);
     }

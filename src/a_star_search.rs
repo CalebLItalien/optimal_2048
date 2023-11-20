@@ -25,7 +25,7 @@ impl PartialOrd for QueueItem {
 
 impl Ord for QueueItem {
     fn cmp(&self, other: &Self) -> Ordering {
-        other.cost.cmp(&self.cost)
+        other.cost.cmp(&self.cost) // lower cost means higher priority
     }
 }
 
